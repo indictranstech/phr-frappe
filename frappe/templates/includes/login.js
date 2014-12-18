@@ -1,3 +1,4 @@
+
 window.disable_signup = {{ disable_signup and "true" or "false" }};
 
 

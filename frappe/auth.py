@@ -123,7 +123,7 @@ class LoginManager:
 			user, pwd = frappe.form_dict.get('usr'), frappe.form_dict.get('pwd')
 		if not (user and pwd):
 			self.fail('Incomplete login details')
-
+		print user
 		self.check_if_enabled(user)
 		self.user = self.check_password(user, pwd)
 

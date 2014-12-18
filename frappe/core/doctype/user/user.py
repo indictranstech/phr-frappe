@@ -82,7 +82,10 @@ class User(Document):
 						# new password given, no email required
 						_update_password(self.name, new_password)
 					if not getattr(self, "no_welcome_mail", False):
-						self.send_welcome_mail()
+						from frappe.utils import random_string
+						new_password=random_string(10)
+						_update_password(self.name, new_password)
+						self.send_welcome_mail(new_password)
 						msgprint(_("Welcome email sent"))
 						return
 			else:
@@ -125,7 +128,7 @@ class User(Document):
 	def password_update_mail(self, password):
 		self.send_login_mail(_("Password Update"), "templates/emails/password_update.html", {"new_password": password})
 
-	def send_welcome_mail(self):
+	def send_welcome_mail(self,password):
 		from frappe.utils import random_string, get_url
 
 		key = random_string(32)
@@ -133,6 +136,9 @@ class User(Document):
 		link = get_url("/update-password?key=" + key)
 
 		self.send_login_mail(_("Verify Your Account"), "templates/emails/new_user.html", {"link": link})
+
+	def update_verification_details(password,key):
+		pass
 
 	def send_login_mail(self, subject, template, add_args):
 		"""send mail with login details"""

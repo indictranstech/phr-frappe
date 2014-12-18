@@ -28,6 +28,8 @@ def handle():
 	parts = frappe.request.path[1:].split("/",3)
 	call = doctype = name = None
 
+	
+
 	if len(parts) > 1:
 		call = parts[1]
 
