@@ -35,6 +35,13 @@
    "permlevel": 0
   }, 
   {
+   "fieldname": "profile_id", 
+   "fieldtype": "Data", 
+   "label": "Profile Id", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "fieldname": "email", 
    "fieldtype": "Data", 
    "hidden": 0, 
@@ -74,6 +81,13 @@
    "oldfieldname": "last_name", 
    "oldfieldtype": "Data", 
    "permlevel": 0
+  }, 
+  {
+   "fieldname": "contact", 
+   "fieldtype": "Data", 
+   "label": "contact", 
+   "permlevel": 0, 
+   "precision": ""
   }, 
   {
    "fieldname": "column_break0", 
@@ -334,6 +348,14 @@
    "reqd": 1
   }, 
   {
+   "fieldname": "access_type", 
+   "fieldtype": "Select", 
+   "label": "Access Type", 
+   "options": "\nWebsite User\nPatient\nProvider\nAdmin", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "description": "Allow user to login only after this hour (0-24)", 
    "fieldname": "login_after", 
    "fieldtype": "Int", 
@@ -462,7 +484,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 5, 
- "modified": "2014-09-08 06:07:20.157915", 
+ "modified": "2015-01-12 21:02:44.290522", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 
