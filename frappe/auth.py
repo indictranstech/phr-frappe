@@ -134,6 +134,7 @@ class LoginManager:
 
 		full_name = " ".join(filter(None, [info.first_name, info.last_name]))
 		frappe.response["full_name"] = full_name
+		frappe.response["profile_id"] = vd.get('name')
 		frappe.local.cookie_manager.set_cookie("full_name", full_name)
 		frappe.local.cookie_manager.set_cookie("user_id", self.user)
 		if vd:
