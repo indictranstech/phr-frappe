@@ -38,6 +38,13 @@
    "permlevel": 0
   }, 
   {
+   "fieldname": "profile_id", 
+   "fieldtype": "Data", 
+   "label": "profile id", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "default": "Open", 
    "fieldname": "status", 
    "fieldtype": "Select", 
@@ -171,7 +178,7 @@
  "in_dialog": 0, 
  "issingle": 0, 
  "max_attachments": 0, 
- "modified": "2014-12-11 10:52:00.765033", 
+ "modified": "2015-02-02 13:52:58.571920", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "ToDo", 
