@@ -3,11 +3,13 @@
 
 from __future__ import unicode_literals
 import frappe
-from frappe.utils import cint, now, get_gravatar
+from frappe.utils import cint, now, get_gravatar,cstr
 from frappe import throw, msgprint, _
 from frappe.auth import _update_password
 from frappe.core.doctype.notification_count.notification_count import clear_notifications
 import frappe.permissions
+import random
+import string
 
 STANDARD_USERS = ("Guest", "Administrator")
 
@@ -128,17 +130,39 @@ class User(Document):
 	def password_update_mail(self, password):
 		self.send_login_mail(_("Password Update"), "templates/emails/password_update.html", {"new_password": password})
 
-	def send_welcome_mail(self,password):
+	def send_welcome_mail(self,password):#anand
 		from frappe.utils import random_string, get_url
-
 		key = random_string(32)
+		mob_code=self.get_mob_code()
 		self.db_set("reset_password_key", key)
-		link = get_url("/update-password?key=" + key)
+		link = get_url("/verify_email?id="+self.profile_id+"&key=" + key)
+		self.update_verification_details(password,key,mob_code,link)
 
-		self.send_login_mail(_("Verify Your Account"), "templates/emails/new_user.html", {"link": link})
+		self.send_login_mail(_("Verify Your Account"), "templates/emails/new_user.html", {"link": link,"password":password})
+		sms='Your Code for PHR:'+cstr(mob_code)
+		rec_list=[]
+		rec_list.append(self.contact)
+		from erpnext.setup.doctype.sms_settings.sms_settings import send_sms
+		send_sms(rec_list,sms)
+	
+	def get_mob_code(self):
+		return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
-	def update_verification_details(password,key):
-		pass
+
+	def update_verification_details(self,password,key,mob_code,link):
+		vd = frappe.get_doc({
+			"doctype":"Verification Details",
+			"profile_id":self.profile_id,
+			"email": self.email,
+			"hash": key,
+			"verification_link": link,
+			"temp_password": password,
+			"created_via": self.created_via,
+			"mobile_verification_code":mob_code
+		})
+		vd.ignore_permissions = True
+		vd.insert()
+		return vd.name
 
 	def send_login_mail(self, subject, template, add_args):
 		"""send mail with login details"""

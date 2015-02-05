@@ -1,4 +1,4 @@
-]<li data-label='{{ page.label }}' {% if page.child_items %} class="dropdown"{% endif %}>
+<li data-label='{{ page.label }}' {% if page.child_items %} class="dropdown"{% endif %}>
 	<a href="{{ page.url or '' }}" {% if page.child_items %} class="dropdown-toggle" onclick="return false;" data-toggle="dropdown"{% endif %} {{ page.target or ''}}>
 	{{ page.label }}
 	{%- if page.child_items -%}

@@ -83,6 +83,13 @@
    "permlevel": 0
   }, 
   {
+   "fieldname": "contact", 
+   "fieldtype": "Data", 
+   "label": "contact", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "fieldname": "column_break0", 
    "fieldtype": "Column Break", 
    "oldfieldtype": "Column Break", 
@@ -161,6 +168,13 @@
    "permlevel": 0
   }, 
   {
+   "fieldname": "barcode", 
+   "fieldtype": "Attach", 
+   "label": "Barcode", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "fieldname": "cb21", 
    "fieldtype": "Column Break", 
    "permlevel": 0
@@ -171,6 +185,14 @@
    "label": "user_image_show", 
    "options": "user_image", 
    "permlevel": 0
+  }, 
+  {
+   "fieldname": "barcode_image", 
+   "fieldtype": "Image", 
+   "label": "barcode_image", 
+   "options": "barcode", 
+   "permlevel": 0, 
+   "precision": ""
   }, 
   {
    "fieldname": "short_bio", 
@@ -373,6 +395,14 @@
    "read_only": 1
   }, 
   {
+   "fieldname": "created_via", 
+   "fieldtype": "Select", 
+   "label": "created_via", 
+   "options": "\nDesktop\nMobile", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "fieldname": "column_break1", 
    "fieldtype": "Column Break", 
    "oldfieldtype": "Column Break", 
@@ -477,7 +507,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 5, 
- "modified": "2014-12-17 20:31:29.076584", 
+ "modified": "2015-01-20 16:49:45.349189", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 

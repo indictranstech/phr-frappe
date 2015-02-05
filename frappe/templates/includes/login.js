@@ -110,7 +110,11 @@ login.login_handlers = (function() {
 							|| "/index";
 					localStorage.removeItem("last_visited");
 					window.location.href = last_visited;
+					profile_id=sessionStorage.getItem("pid")
+					profile_id=sessionStorage.getItem("cid")
 				} else {
+					profile_id=sessionStorage.getItem("pid")
+					profile_id=sessionStorage.getItem("cid")
 					window.location.href = "/index";
 				}
 			} else if(["#signup", "#forgot"].indexOf(window.location.hash)!==-1) {

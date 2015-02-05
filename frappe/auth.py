@@ -96,10 +96,21 @@ class LoginManager:
 		frappe.local.cookie_manager.init_cookies()
 
 		info = frappe.db.get_value("User", self.user,
-			["user_type", "first_name", "last_name", "user_image"], as_dict=1)
+			["user_type", "first_name", "last_name", "user_image","access_type"], as_dict=1)
+		#anand
+		vd=frappe.db.get_value("Verification Details",{"email":self.user},["mflag","name"],as_dict=1)
+		if vd and vd.mflag==0:
+			frappe.local.response["mob_v_req"]='Yes'
+
 		if info.user_type=="Website User":
 			frappe.local.cookie_manager.set_cookie("system_user", "no")
 			frappe.local.response["message"] = "No App"
+			if info.access_type=='Patient':
+				frappe.local.response["access_link"] = "/patient"
+			elif info.access_type=='Provider':
+				frappe.local.response["access_link"] = "/providers_dashboard"
+			elif info.access_type=='Admin':
+				frappe.local.response["access_link"] = "/products"
 		else:
 			frappe.local.cookie_manager.set_cookie("system_user", "yes")
 			frappe.local.response['message'] = 'Logged In'
@@ -108,6 +119,8 @@ class LoginManager:
 		frappe.response["full_name"] = full_name
 		frappe.local.cookie_manager.set_cookie("full_name", full_name)
 		frappe.local.cookie_manager.set_cookie("user_id", self.user)
+		if vd:
+			frappe.local.cookie_manager.set_cookie("profile_id", vd.name)
 		frappe.local.cookie_manager.set_cookie("user_image", info.user_image or "")
 
 	def make_session(self, resume=False):
@@ -240,6 +253,7 @@ def _update_password(user, password):
 		values (%s, password(%s))
 		on duplicate key update `password`=password(%s)""", (user,
 		password, password))
+	return "done"
 
 @frappe.whitelist()
 def get_logged_user():
@@ -248,4 +262,4 @@ def get_logged_user():
 def clear_cookies():
 	if hasattr(frappe.local, "session"):
 		frappe.session.sid = ""
-	frappe.local.cookie_manager.delete_cookie(["full_name", "user_id", "sid", "user_image", "system_user"])
+	frappe.local.cookie_manager.delete_cookie(["full_name", "user_id", "sid", "user_image", "system_user","profile_id"])
