@@ -125,7 +125,7 @@ class LoginManager:
 			if info.access_type=='Patient':
 				frappe.local.response["access_link"] = "/patient"
 			elif info.access_type=='Provider':
-				frappe.local.response["access_link"] = "/providers_dashboard"
+				frappe.local.response["access_link"] = "/provider"
 			elif info.access_type=='Admin':
 				frappe.local.response["access_link"] = "/products"
 		else:

@@ -33,6 +33,14 @@
    "width": "300px"
   }, 
   {
+   "fieldname": "profile_id", 
+   "fieldtype": "Data", 
+   "label": "profile_id", 
+   "permlevel": 0, 
+   "precision": "", 
+   "read_only": 1
+  }, 
+  {
    "fieldname": "column_break_2", 
    "fieldtype": "Column Break", 
    "permlevel": 0
@@ -171,7 +179,7 @@
  "in_dialog": 0, 
  "issingle": 0, 
  "max_attachments": 0, 
- "modified": "2014-12-11 10:52:00.765033", 
+ "modified": "2015-02-05 23:23:20.769731", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "ToDo", 
