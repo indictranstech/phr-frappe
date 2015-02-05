@@ -113,7 +113,7 @@ class LoginManager:
 		frappe.local.cookie_manager.init_cookies()
 
 		info = frappe.db.get_value("User", self.user,
-		["user_type", "first_name", "last_name", "user_image","access_type"], as_dict=1)
+			["user_type", "first_name", "last_name", "user_image","access_type"], as_dict=1)
 		#anand
 		vd=frappe.db.get_value("Verification Details",{"email":self.user},["mflag","name"],as_dict=1)
 		if vd and vd.mflag==0:
@@ -154,7 +154,7 @@ class LoginManager:
 			user, pwd = frappe.form_dict.get('usr'), frappe.form_dict.get('pwd')
 		if not (user and pwd):
 			self.fail('Incomplete login details')
-
+		print user
 		self.check_if_enabled(user)
 		self.user = self.check_password(user, pwd)
 
@@ -271,6 +271,7 @@ def _update_password(user, password):
 		values (%s, password(%s))
 		on duplicate key update `password`=password(%s)""", (user,
 		password, password))
+	return "done"
 
 @frappe.whitelist()
 def get_logged_user():
@@ -279,4 +280,4 @@ def get_logged_user():
 def clear_cookies():
 	if hasattr(frappe.local, "session"):
 		frappe.session.sid = ""
-	frappe.local.cookie_manager.delete_cookie(["full_name", "user_id", "sid", "user_image", "system_user"])
+	frappe.local.cookie_manager.delete_cookie(["full_name", "user_id", "sid", "user_image", "system_user","profile_id"])

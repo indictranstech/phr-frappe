@@ -121,6 +121,7 @@ class Session:
 	def __init__(self, user, resume=False):
 		self.sid = cstr(frappe.form_dict.get('sid') or unquote(frappe.request.cookies.get('sid', 'Guest')))
 		self.user = user
+		#self.profile_id=profile_id
 		self.data = frappe._dict({'data': frappe._dict({})})
 		self.time_diff = None
 		if resume:
@@ -141,6 +142,7 @@ class Session:
 
 		self.data['user'] = self.user
 		self.data['sid'] = sid
+		#self.data['profile_id']=self.profile_id
 		self.data['data']['user'] = self.user
 		self.data['data']['session_ip'] = frappe.get_request_header('REMOTE_ADDR')
 		if self.user != "Guest":

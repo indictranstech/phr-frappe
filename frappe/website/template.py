@@ -21,6 +21,7 @@ def render_blocks(context):
 		source = frappe.local.jloader.get_source(frappe.local.jenv, template_path)[0]
 		for referenced_template_path in meta.find_referenced_templates(env.parse(source)):
 			if referenced_template_path:
+
 				_render_blocks(referenced_template_path)
 
 		template = frappe.get_template(template_path)

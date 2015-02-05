@@ -30,6 +30,8 @@ def handle():
 	print parts
 	call = doctype = name = None
 
+	
+
 	if len(parts) > 1:
 		call = parts[1]
 
