@@ -498,6 +498,15 @@
    "no_copy": 1, 
    "permlevel": 0, 
    "read_only": 1
+  }, 
+  {
+   "fieldname": "password_str", 
+   "fieldtype": "Data", 
+   "hidden": 1, 
+   "label": "password_str", 
+   "permlevel": 0, 
+   "precision": "", 
+   "read_only": 1
   }
  ], 
  "hide_heading": 0, 
@@ -507,7 +516,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 5, 
- "modified": "2015-01-20 16:49:45.349189", 
+ "modified": "2015-02-17 14:47:46.846699", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 

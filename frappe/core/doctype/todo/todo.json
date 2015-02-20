@@ -68,7 +68,7 @@
   {
    "allow_on_submit": 0, 
    "fieldname": "date", 
-   "fieldtype": "Date", 
+   "fieldtype": "Datetime", 
    "hidden": 0, 
    "in_filter": 0, 
    "in_list_view": 1, 
@@ -171,7 +171,7 @@
  "in_dialog": 0, 
  "issingle": 0, 
  "max_attachments": 0, 
- "modified": "2014-12-11 10:52:00.765033", 
+ "modified": "2015-02-18 18:10:00.379665", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "ToDo", 
