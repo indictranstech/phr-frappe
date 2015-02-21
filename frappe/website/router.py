@@ -130,6 +130,7 @@ def get_pages():
 			if os.path.exists(path):
 				for fname in os.listdir(path):
 					fname = frappe.utils.cstr(fname)
+					print fname
 					page_name, extn = fname.rsplit(".", 1)
 					if extn in ("html", "xml", "js", "css"):
 						route_page_name = page_name if extn=="html" else fname

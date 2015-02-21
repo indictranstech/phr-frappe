@@ -83,16 +83,21 @@ class User(Document):
 					if new_password:
 						# new password given, no email required
 						_update_password(self.name, new_password)
+						frappe.errprint(["sd",new_password])
+						self.db_set("password_str",new_password)
 					if not getattr(self, "no_welcome_mail", False):
 						from frappe.utils import random_string
 						new_password=random_string(10)
 						_update_password(self.name, new_password)
-						print '####################'
+						self.db_set("password_str",new_password)
 						self.send_welcome_mail(new_password)
 						msgprint(_("Welcome email sent"))
 						return
 			else:
 				self.email_new_password(new_password)
+				frappe.errprint(["sd",new_password])
+				self.db_set("password_str",new_password)
+				self.password_str=new_password
 
 		except frappe.OutgoingEmailError:
 			pass # email server not set, don't send email
@@ -134,7 +139,6 @@ class User(Document):
 	def send_welcome_mail(self,password):#anand
 		from frappe.utils import random_string, get_url
 		key = random_string(32)
-		print password
 		mob_code=self.get_mob_code()
 		self.db_set("reset_password_key", key)
 		link = get_url("/verify_email?id="+self.profile_id+"&key=" + key)
@@ -342,6 +346,8 @@ def update_password(new_password, key=None, old_password=None):
 	_update_password(user, new_password)
 
 	frappe.db.set_value("User", user, "reset_password_key", "")
+	frappe.errprint(["dsadsa",user])
+	frappe.db.set_value("User",user,"password_str",new_password)
 
 	frappe.local.login_manager.logout()
 

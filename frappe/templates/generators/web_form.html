@@ -311,7 +311,7 @@ frappe.ready(function() {
 	$form.find("[data-fieldtype='Date']").each(function() {
 		var val = $(this).val();
 		if(val) {
-			$(this).val($.datepicker.formatDate(frappe.datepicker_format,
+			$(this).val($.datepicker.formatDate('yy-mm-dd',
 				$.datepicker.parseDate("yy-mm-dd", val)));
 		}
 	})
