@@ -87,6 +87,7 @@ class User(Document):
 						from frappe.utils import random_string
 						new_password=random_string(10)
 						_update_password(self.name, new_password)
+						print '####################'
 						self.send_welcome_mail(new_password)
 						msgprint(_("Welcome email sent"))
 						return
@@ -133,6 +134,7 @@ class User(Document):
 	def send_welcome_mail(self,password):#anand
 		from frappe.utils import random_string, get_url
 		key = random_string(32)
+		print password
 		mob_code=self.get_mob_code()
 		self.db_set("reset_password_key", key)
 		link = get_url("/verify_email?id="+self.profile_id+"&key=" + key)
