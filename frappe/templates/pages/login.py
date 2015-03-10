@@ -5,7 +5,9 @@ from __future__ import unicode_literals
 import frappe
 import json
 import frappe.utils
-from frappe import _
+from frappe import _,msgprint
+from phr.templates.pages.login import create_profile_in_solr,get_barcode,get_image_path
+
 
 class SignupDisabledError(frappe.PermissionError): pass
 
@@ -160,55 +162,111 @@ def login_via_oauth2(provider, code, decoder=None):
 	login_oauth_user(info, provider=provider)
 
 def login_oauth_user(data, provider=None):
-	user = data["email"]
+	if data.has_key("email"):
+		user = data["email"]
 
-	try:
-		update_oauth_user(user, data, provider)
-	except SignupDisabledError:
-		return frappe.respond_as_web_page("Signup is Disabled", "Sorry. Signup from Website is disabled.",
-			success=False, http_status_code=403)
+		try:
+			update_oauth_user(user, data, provider)
+		except SignupDisabledError:
+			return frappe.respond_as_web_page("Signup is Disabled", "Sorry. Signup from Website is disabled.",
+				success=False, http_status_code=403)
 
-	frappe.local.login_manager.user = user
-	frappe.local.login_manager.post_login()
+		frappe.local.login_manager.user = user
+		frappe.local.login_manager.post_login()
 
-	# redirect!
-	frappe.local.response["type"] = "redirect"
+		# redirect!
+		frappe.local.response["type"] = "redirect"
 
-	# the #desktop is added to prevent a facebook redirect bug
-	frappe.local.response["location"] = "/desk#desktop" if frappe.local.response.get('message') == 'Logged In' else "/"
+		# the #desktop is added to prevent a facebook redirect bug
+		frappe.local.response["location"] = "/desk#desktop" if frappe.local.response.get('message') == 'Logged In' else frappe.local.response["access_link"]
 
-	# because of a GET request!
-	frappe.db.commit()
+		# because of a GET request!
+		frappe.db.commit()
+	else:
+		return _("OOP'S Isuue with your Account")
+
 
 def update_oauth_user(user, data, provider):
 	if isinstance(data.get("location"), dict):
 		data["location"] = data.get("location").get("name")
 
 	save = False
+	barcode=get_barcode()
+	args={
+		"person_firstname":data.get("first_name") or data.get("given_name") or data.get("name"),
+		"person_middlename":"add",
+		"person_lastname": data.get("last_name") or data.get("family_name"),
+		"email":data.get("email"),
+		"mobile":"",
+		"received_from":"Desktop",
+		"provider":"false",
+		"barcode":str(barcode)
+	}
 
 	if not frappe.db.exists("User", user):
 
 		# is signup disabled?
 		if frappe.utils.cint(frappe.db.get_single_value("Website Settings", "disable_signup")):
 			raise SignupDisabledError
-
-		save = True
-		user = frappe.new_doc("User")
-		user.update({
-			"doctype":"User",
-			"first_name": data.get("first_name") or data.get("given_name") or data.get("name"),
-			"last_name": data.get("last_name") or data.get("family_name"),
-			"email": data["email"],
-			"gender": (data.get("gender") or "").title(),
-			"enabled": 1,
-			"new_password": frappe.generate_hash(data["email"]),
-			"location": data.get("location"),
-			"user_type": "Website User",
-			"user_image": data.get("picture") or data.get("avatar_url")
-		})
+		
+		
+		profile_res=create_profile_in_solr(args)
+		response=json.loads(profile_res)
+		if response['returncode']==101:
+			path=get_image_path(barcode,response['entityid'])
+			file_path='/files/'+response['entityid']+'/'+response['entityid']+".svg"
+			save = True
+			user = frappe.new_doc("User")
+			user.update({
+				"doctype":"User",
+				"profile_id":response['entityid'],
+				"first_name": data.get("first_name") or data.get("given_name") or data.get("name"),
+				"last_name": data.get("last_name") or data.get("family_name"),
+				"email": data["email"],
+				"gender": (data.get("gender") or "").title(),
+				"enabled": 1,
+				"new_password": frappe.generate_hash(data["email"]),
+				"location": data.get("location"),
+				"user_type": "Website User",
+				"access_type":"Patient",
+				"user_image": data.get("picture") or data.get("avatar_url"),
+				"created_via":"Desktop",
+				"barcode":file_path
+			})
+		else:
+			save = True
+			user = frappe.new_doc("User")
+			user.update({
+				"doctype":"User",
+				"first_name": data.get("first_name") or data.get("given_name") or data.get("name"),
+				"last_name": data.get("last_name") or data.get("family_name"),
+				"email": data["email"],
+				"gender": (data.get("gender") or "").title(),
+				"enabled": 1,
+				"new_password": frappe.generate_hash(data["email"]),
+				"location": data.get("location"),
+				"user_type": "Website User",
+				"user_image": data.get("picture") or data.get("avatar_url")
+			})
 
 	else:
 		user = frappe.get_doc("User", user)
+		save = True
+		if not user.profile_id and not user.access_type=="Provider":
+			profile_res=create_profile_in_solr(args)
+			if response['returncode']==101:
+				path=get_image_path(barcode,response['entityid'])
+				file_path='/files/'+response['entityid']+'/'+response['entityid']+".svg"
+				if not barcode:
+					user.update({
+						"barcode":file_path,
+						"profile_id":response['entityid']
+					})
+				else:
+					user.update({
+						"profile_id":response['entityid']
+					}) 
+
 
 	if provider=="facebook" and not user.get("fb_userid"):
 		save = True
