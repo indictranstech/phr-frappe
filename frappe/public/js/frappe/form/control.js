@@ -443,6 +443,7 @@ frappe.ui.form.ControlDate = frappe.ui.form.ControlData.extend({
 	set_datepicker: function() {
 		this.datepicker_options.dateFormat =
 			(frappe.boot.sysdefaults.date_format || 'yyyy-mm-dd').replace("yyyy", "yy")
+		console.log(this.$input)
 		this.$input.datepicker(this.datepicker_options);
 	},
 	parse: function(value) {
@@ -868,7 +869,12 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 			this.$input_area.find(".btn-new").on("click", function() {
 				var doctype = me.get_options();
 				if(!doctype) return;
-				me.frm.new_doc(doctype, me);
+
+				if (me.frm) {
+					me.frm.new_doc(doctype, me);
+				} else {
+					new_doc(doctype);
+				}
 			});
 		} else {
 			this.$input_area.find(".btn-new").remove();

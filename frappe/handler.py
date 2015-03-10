@@ -61,6 +61,7 @@ def uploadfile():
 def handle():
 	"""handle request"""
 	cmd = frappe.local.form_dict.cmd
+	print cmd
 
 	if cmd!='login':
 		execute_cmd(cmd)

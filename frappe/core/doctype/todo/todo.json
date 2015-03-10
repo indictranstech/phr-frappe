@@ -33,6 +33,14 @@
    "width": "300px"
   }, 
   {
+   "fieldname": "profile_id", 
+   "fieldtype": "Data", 
+   "label": "profile_id", 
+   "permlevel": 0, 
+   "precision": "", 
+   "read_only": 1
+  }, 
+  {
    "fieldname": "column_break_2", 
    "fieldtype": "Column Break", 
    "permlevel": 0

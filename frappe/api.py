@@ -25,7 +25,9 @@ def handle():
 		DELETE will delete
 	/api/resource/{doctype}/{name}?run_method={method} will run a whitelisted controller method
 	"""
+	print frappe.request.path
 	parts = frappe.request.path[1:].split("/",3)
+	print parts
 	call = doctype = name = None
 
 	
