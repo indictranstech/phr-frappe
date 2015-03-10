@@ -93,24 +93,7 @@ class LoginManager:
 		self.set_user_info()
 
 	def set_user_info(self):
-		# # set sid again
-		# frappe.local.cookie_manager.init_cookies()
-
-		# info = frappe.db.get_value("User", self.user,
-		# 	["user_type", "first_name", "last_name", "user_image"], as_dict=1)
-		# if info.user_type=="Website User":
-		# 	frappe.local.cookie_manager.set_cookie("system_user", "no")
-		# 	frappe.local.response["message"] = "No App"
-		# else:
-		# 	frappe.local.cookie_manager.set_cookie("system_user", "yes")
-		# 	frappe.local.response['message'] = 'Logged In'
-
-		# full_name = " ".join(filter(None, [info.first_name, info.last_name]))
-		# frappe.response["full_name"] = full_name
-		# frappe.local.cookie_manager.set_cookie("full_name", full_name)
-		# frappe.local.cookie_manager.set_cookie("user_id", self.user)
-		# frappe.local.cookie_manager.set_cookie("user_image", info.user_image or "")
-		# set sid again
+		
 		frappe.local.cookie_manager.init_cookies()
 
 		info = frappe.db.get_value("User", self.user,
@@ -143,6 +126,7 @@ class LoginManager:
 
 		elif info.profile_id:
 			frappe.local.cookie_manager.set_cookie("profile_id", info.profile_id)
+		
 		frappe.local.cookie_manager.set_cookie("user_image", info.user_image or "")
 
 	def make_session(self, resume=False):
