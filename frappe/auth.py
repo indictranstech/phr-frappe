@@ -255,6 +255,7 @@ class CookieManager:
 			response.set_cookie(key, "", expires=expires)
 
 def _update_password(user, password):
+	frappe.errprint(["Auth",user,password])
 	frappe.db.sql("""insert into __Auth (user, `password`)
 		values (%s, password(%s))
 		on duplicate key update `password`=password(%s)""", (user,

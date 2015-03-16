@@ -344,7 +344,6 @@ def update_password(new_password, key=None, old_password=None):
 	_update_password(user, new_password)
 
 	frappe.db.set_value("User", user, "reset_password_key", "")
-	frappe.errprint(["dsadsa",user])
 	frappe.db.set_value("User",user,"password_str",new_password)
 
 	frappe.local.login_manager.logout()
