@@ -13,6 +13,7 @@ from frappe import conf
 from frappe.sessions import Session, clear_sessions, delete_session
 from frappe.modules.patch_handler import check_session_stopped
 
+
 from urllib import quote
 
 class HTTPRequest:
@@ -92,28 +93,11 @@ class LoginManager:
 		self.set_user_info()
 
 	def set_user_info(self):
-		# # set sid again
-		# frappe.local.cookie_manager.init_cookies()
-
-		# info = frappe.db.get_value("User", self.user,
-		# 	["user_type", "first_name", "last_name", "user_image"], as_dict=1)
-		# if info.user_type=="Website User":
-		# 	frappe.local.cookie_manager.set_cookie("system_user", "no")
-		# 	frappe.local.response["message"] = "No App"
-		# else:
-		# 	frappe.local.cookie_manager.set_cookie("system_user", "yes")
-		# 	frappe.local.response['message'] = 'Logged In'
-
-		# full_name = " ".join(filter(None, [info.first_name, info.last_name]))
-		# frappe.response["full_name"] = full_name
-		# frappe.local.cookie_manager.set_cookie("full_name", full_name)
-		# frappe.local.cookie_manager.set_cookie("user_id", self.user)
-		# frappe.local.cookie_manager.set_cookie("user_image", info.user_image or "")
-		# set sid again
+		
 		frappe.local.cookie_manager.init_cookies()
 
 		info = frappe.db.get_value("User", self.user,
-			["user_type", "first_name", "last_name", "user_image","access_type"], as_dict=1)
+			["user_type", "first_name", "last_name", "user_image","access_type","profile_id"], as_dict=1)
 		#anand
 		vd=frappe.db.get_value("Verification Details",{"email":self.user},["mflag","name"],as_dict=1)
 		if vd and vd.mflag==0:
@@ -139,6 +123,10 @@ class LoginManager:
 		if vd:
 			frappe.response["profile_id"] = vd.get('name')
 			frappe.local.cookie_manager.set_cookie("profile_id", vd.name)
+
+		elif info.profile_id:
+			frappe.local.cookie_manager.set_cookie("profile_id", info.profile_id)
+		
 		frappe.local.cookie_manager.set_cookie("user_image", info.user_image or "")
 
 	def make_session(self, resume=False):
@@ -267,6 +255,7 @@ class CookieManager:
 			response.set_cookie(key, "", expires=expires)
 
 def _update_password(user, password):
+	frappe.errprint(["Auth",user,password])
 	frappe.db.sql("""insert into __Auth (user, `password`)
 		values (%s, password(%s))
 		on duplicate key update `password`=password(%s)""", (user,

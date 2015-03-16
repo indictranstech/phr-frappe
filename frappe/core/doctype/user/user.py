@@ -81,9 +81,7 @@ class User(Document):
 			if self.in_insert:
 				if self.name not in STANDARD_USERS:
 					if new_password:
-						# new password given, no email required
 						_update_password(self.name, new_password)
-						frappe.errprint(["sd",new_password])
 						self.db_set("password_str",new_password)
 					if not getattr(self, "no_welcome_mail", False):
 						from frappe.utils import random_string
@@ -346,7 +344,6 @@ def update_password(new_password, key=None, old_password=None):
 	_update_password(user, new_password)
 
 	frappe.db.set_value("User", user, "reset_password_key", "")
-	frappe.errprint(["dsadsa",user])
 	frappe.db.set_value("User",user,"password_str",new_password)
 
 	frappe.local.login_manager.logout()
