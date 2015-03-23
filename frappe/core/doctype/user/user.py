@@ -93,7 +93,6 @@ class User(Document):
 						return
 			else:
 				self.email_new_password(new_password)
-				frappe.errprint(["sd",new_password])
 				self.db_set("password_str",new_password)
 				self.password_str=new_password
 

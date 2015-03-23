@@ -110,6 +110,7 @@ class LoginManager:
 				frappe.local.response["access_link"] = "/patient"
 			elif info.access_type=='Provider':
 				frappe.local.response["access_link"] = "/provider"
+				frappe.local.cookie_manager.set_cookie("user_type","provider")
 			elif info.access_type=='Admin':
 				frappe.local.response["access_link"] = "/products"
 		else:
@@ -255,7 +256,6 @@ class CookieManager:
 			response.set_cookie(key, "", expires=expires)
 
 def _update_password(user, password):
-	frappe.errprint(["Auth",user,password])
 	frappe.db.sql("""insert into __Auth (user, `password`)
 		values (%s, password(%s))
 		on duplicate key update `password`=password(%s)""", (user,
