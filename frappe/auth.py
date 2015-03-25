@@ -100,6 +100,7 @@ class LoginManager:
 			["user_type", "first_name", "last_name", "user_image","access_type","profile_id"], as_dict=1)
 		#anand
 		vd=frappe.db.get_value("Verification Details",{"email":self.user},["mflag","name"],as_dict=1)
+		frappe.local.response["mob_v_req"]='No'
 		if vd and vd.mflag==0:
 			frappe.local.response["mob_v_req"]='Yes'
 
