@@ -142,7 +142,9 @@ class User(Document):
 		self.update_verification_details(password,key,mob_code,link)
 
 		self.send_login_mail(_("Verify Your Account"), "templates/emails/new_user.html", {"link": link,"password":password})
-		sms='Your Code for PHR:'+cstr(mob_code)
+		
+		from phr.templates.pages.patient import get_sms_template
+		sms = get_sms_template("registration",{ "mobile_code": mob_code })
 		rec_list=[]
 		rec_list.append(self.contact)
 		from erpnext.setup.doctype.sms_settings.sms_settings import send_sms
