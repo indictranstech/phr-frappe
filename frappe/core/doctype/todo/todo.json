@@ -46,6 +46,13 @@
    "permlevel": 0
   }, 
   {
+   "fieldname": "profile_id", 
+   "fieldtype": "Data", 
+   "label": "profile id", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "default": "Open", 
    "fieldname": "status", 
    "fieldtype": "Select", 
