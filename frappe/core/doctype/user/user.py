@@ -88,7 +88,7 @@ class User(Document):
 						new_password=random_string(10)
 						_update_password(self.name, new_password)
 						self.db_set("password_str",new_password)
-						#self.send_welcome_mail(new_password)
+						self.send_welcome_mail(new_password)
 						msgprint(_("Welcome email sent"))
 						return
 			else:
