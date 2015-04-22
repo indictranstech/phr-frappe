@@ -162,6 +162,7 @@ def login_via_oauth2(provider, code, decoder=None):
 	login_oauth_user(info, provider=provider)
 
 def login_oauth_user(data, provider=None):
+
 	if data.has_key("email"):
 		user = data["email"]
 

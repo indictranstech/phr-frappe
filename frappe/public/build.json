@@ -1,9 +1,8 @@
 {
 	"css/frappe-web.css": [
-		"public/css/bootstrap.css",
 		"public/css/font-awesome.css",
-		"public/css/nprogress.css",
-		"website/css/website.css"
+		"public/css/nprogress.css"
+		
 	],
 	"js/frappe-web.min.js": [
 		"public/js/lib/bootstrap.min.js",
