@@ -122,11 +122,13 @@ class LoginManager:
 		frappe.response["full_name"] = full_name
 		frappe.local.cookie_manager.set_cookie("full_name", full_name)
 		frappe.local.cookie_manager.set_cookie("user_id", self.user)
-		#if vd:
-		#	frappe.response["profile_id"] = vd.get('name')
-		#	frappe.local.cookie_manager.set_cookie("profile_id", vd.name)
+		
+		if vd:
+			frappe.response["profile_id"] = vd.get('name')
+			frappe.local.cookie_manager.set_cookie("profile_id", vd.name)
 
-		if info.profile_id:
+		elif info.profile_id:
+			frappe.response["profile_id"] = info.profile_id
 			frappe.local.cookie_manager.set_cookie("profile_id", info.profile_id)
 		
 		frappe.local.cookie_manager.set_cookie("user_image", info.user_image or "")
