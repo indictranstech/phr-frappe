@@ -100,6 +100,7 @@ login.login_handlers = (function() {
 
 	var login_handlers = {
 		200: function(data) {
+			console.log("testinf")
 			if(data.message=="Logged In") {
 				window.location.href = get_url_arg("redirect-to") || "/desk";
 			} else if(data.message=="No App") {
