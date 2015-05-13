@@ -1,11 +1,12 @@
 {
 	"css/frappe-web.css": [
-	"public/css/font-awesome.css"
+		"public/css/font-awesome.css"
 	],
 	"js/frappe-web.min.js": [
 		"public/js/lib/bootstrap.min.js",
 		"public/js/frappe/provide.js",
 		"public/js/frappe/misc/number_format.js",
+		"public/js/lib/nprogress.js",
 		"public/js/frappe/translate.js",
 		"public/js/frappe/misc/pretty_date.js",
 		"public/js/lib/moment/moment.min.js",

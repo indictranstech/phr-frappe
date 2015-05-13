@@ -101,7 +101,8 @@ class User(Document):
 
 	def update_gravatar(self):
 		if not self.user_image:
-			self.user_image = get_gravatar(self.name)
+			# self.user_image = get_gravatar(self.name)
+			self.user_image = "/assets/phr/images/profile-photo.jpg"
 
 	@Document.hook
 	def validate_reset_password(self):
