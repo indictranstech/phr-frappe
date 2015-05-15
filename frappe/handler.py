@@ -27,8 +27,8 @@ def logout():
 def web_logout():
 	frappe.local.login_manager.logout()
 	frappe.db.commit()
-	frappe.respond_as_web_page("Logged Out", """<p>You have been logged out.</p>
-		<p><a href='index'>Back to Home</a></p>""")
+	frappe.respond_as_web_page("Logged Out", """<p style="margin-top:10%;text-align: center;">You have been logged out.</p>
+		<p style="text-align: center;"><a href='index'>Back to Home</a></p>""")
 
 @frappe.whitelist(allow_guest=True)
 def run_custom_method(doctype, name, custom_method):
