@@ -100,6 +100,7 @@ class LoginManager:
 			["user_type", "first_name", "last_name", "user_image","access_type","profile_id"], as_dict=1)
 		#anand
 		vd=frappe.db.get_value("Verification Details",{"email":self.user},["mflag","name"],as_dict=1)
+		frappe.local.response["mob_v_req"]='No'
 		if vd and vd.mflag==0:
 			frappe.local.response["mob_v_req"]='Yes'
 
@@ -121,6 +122,7 @@ class LoginManager:
 		frappe.response["full_name"] = full_name
 		frappe.local.cookie_manager.set_cookie("full_name", full_name)
 		frappe.local.cookie_manager.set_cookie("user_id", self.user)
+		
 		if vd:
 			frappe.response["profile_id"] = vd.get('name')
 			frappe.local.cookie_manager.set_cookie("profile_id", vd.name)
