@@ -6,7 +6,7 @@ import frappe
 import json
 import frappe.utils
 from frappe import _,msgprint
-from phr.templates.pages.login import create_profile_in_solr,get_barcode,get_image_path
+from phr.templates.pages.login import create_profile_in_solr, get_barcode, get_image_path, set_default_dashboard
 
 
 class SignupDisabledError(frappe.PermissionError): pass
@@ -234,6 +234,8 @@ def update_oauth_user(user, data, provider):
 				"created_via":"Desktop",
 				"barcode":file_path
 			})
+
+			db=set_default_dashboard(response['entityid'])
 		else:
 			save = True
 			user = frappe.new_doc("User")
@@ -257,6 +259,7 @@ def update_oauth_user(user, data, provider):
 			profile_res=create_profile_in_solr(args)
 			if response['returncode']==101:
 				path=get_image_path(barcode,response['entityid'])
+				db=set_default_dashboard(response['entityid'])
 				file_path='/files/'+response['entityid']+'/'+response['entityid']+".svg"
 				if not barcode:
 					user.update({
