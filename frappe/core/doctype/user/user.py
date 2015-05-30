@@ -139,6 +139,7 @@ class User(Document):
 		key = random_string(32)
 		mob_code=self.get_mob_code()
 		self.db_set("reset_password_key", key)
+		print "\n\n in profile \n\n ", [self.profile_id]
 		link = get_url("/verify_email?id="+self.profile_id+"&key=" + key)
 		self.update_verification_details(password,key,mob_code,link)
 
