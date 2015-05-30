@@ -33,7 +33,6 @@ def get_all_patches():
 		if app=="webnotes":
 			app="frappe"
 		patches.extend(frappe.get_file_items(frappe.get_pymodule_path(app, "patches.txt")))
-
 	return patches
 
 def reload_doc(args):
