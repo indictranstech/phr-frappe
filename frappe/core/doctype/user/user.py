@@ -82,19 +82,14 @@ class User(Document):
 				if self.name not in STANDARD_USERS:
 					if new_password:
 						_update_password(self.name, new_password)
-						self.db_set("password_str",new_password)
+
 					if not getattr(self, "no_welcome_mail", False):
 						from frappe.utils import random_string
-						new_password=random_string(10)
-						_update_password(self.name, new_password)
-						self.db_set("password_str",new_password)
 						self.send_welcome_mail(new_password)
 						msgprint(_("Welcome email sent"))
 						return
 			else:
 				self.email_new_password(new_password)
-				self.db_set("password_str",new_password)
-				self.password_str=new_password
 
 		except frappe.OutgoingEmailError:
 			pass # email server not set, don't send email
@@ -136,41 +131,13 @@ class User(Document):
 
 	def send_welcome_mail(self,password):#anand
 		from frappe.utils import random_string, get_url
+
 		key = random_string(32)
-		mob_code=self.get_mob_code()
 		self.db_set("reset_password_key", key)
-		print "\n\n in profile \n\n ", [self.profile_id]
-		link = get_url("/verify_email?id="+self.profile_id+"&key=" + key)
-		self.update_verification_details(password,key,mob_code,link)
+		link = get_url("/update-password?key=" + key)
 
-		self.send_login_mail(_("Verify Your Account"), "templates/emails/new_user.html", {"link": link,"password":password})
-		
-		from phr.templates.pages.patient import get_sms_template
-		sms = get_sms_template("registration",{ "mobile_code": mob_code })
-		rec_list=[]
-		rec_list.append(self.contact)
-		from erpnext.setup.doctype.sms_settings.sms_settings import send_sms
-		send_sms(rec_list,sms)
+		self.send_login_mail(_("Verify Your Account"), "templates/emails/new_user.html", {"link": link})
 	
-	def get_mob_code(self):
-		return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
-
-
-	def update_verification_details(self,password,key,mob_code,link):
-		vd = frappe.get_doc({
-			"doctype":"Verification Details",
-			"profile_id":self.profile_id,
-			"email": self.email,
-			"hash": key,
-			"verification_link": link,
-			"temp_password": password,
-			"created_via": self.created_via,
-			"mobile_verification_code":mob_code
-		})
-		vd.ignore_permissions = True
-		vd.insert()
-		return vd.name
-
 	def send_login_mail(self, subject, template, add_args):
 		"""send mail with login details"""
 		from frappe.utils.user import get_user_fullname
