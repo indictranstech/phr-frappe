@@ -100,19 +100,20 @@ class LoginManager:
 			["user_type", "first_name", "last_name", "user_image","access_type","profile_id"], as_dict=1)
 		#anand
 		vd=frappe.db.get_value("Verification Details",{"email":self.user},["mflag","name"],as_dict=1)
-		frappe.local.response["mob_v_req"]='No'
-		if vd and vd.mflag==0:
-			frappe.local.response["mob_v_req"]='Yes'
+		frappe.local.response["mob_v_req"] = 'No'
+		if vd and vd.mflag == 0:
+			frappe.local.response["mob_v_req"] = 'Yes'
 
-		if info.user_type=="Website User":
+		if info.user_type == "Website User":
 			frappe.local.cookie_manager.set_cookie("system_user", "no")
 			frappe.local.response["message"] = "No App"
-			if info.access_type=='Patient':
+			if info.access_type == 'Patient':
 				frappe.local.response["access_link"] = "/patient"
-			elif info.access_type=='Provider':
+				frappe.local.cookie_manager.set_cookie("user_type","patient")
+			elif info.access_type == 'Provider':
 				frappe.local.response["access_link"] = "/provider"
 				frappe.local.cookie_manager.set_cookie("user_type","provider")
-			elif info.access_type=='Admin':
+			elif info.access_type == 'Admin':
 				frappe.local.response["access_link"] = "/products"
 		else:
 			frappe.local.cookie_manager.set_cookie("system_user", "yes")
