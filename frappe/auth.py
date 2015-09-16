@@ -85,26 +85,35 @@ class LoginManager:
 		self.authenticate()
 		self.post_login()
 
+	def is_valid_user(self, user_info):
+		login_as = frappe.form_dict.get("login_as")
+		if user_info.access_type != login_as:
+			frappe.throw(_("<center><b>%s</b> can not login as <b>%s</b></center>"%(self.user,login_as)), frappe.AuthenticationError)
+
 	def post_login(self):
 		self.run_trigger('on_login')
 		self.validate_ip_address()
 		self.validate_hour()
 		self.make_session()
+		# self.is_valid_user()
 		self.set_user_info()
 
 	def set_user_info(self):
-		
 		frappe.local.cookie_manager.init_cookies()
 
 		info = frappe.db.get_value("User", self.user,
 			["user_type", "first_name", "last_name", "user_image","access_type","profile_id"], as_dict=1)
-		#anand
-		vd=frappe.db.get_value("Verification Details",{"email":self.user},["mflag","name"],as_dict=1)
-		frappe.local.response["mob_v_req"] = 'No'
-		if vd and vd.mflag == 0:
-			frappe.local.response["mob_v_req"] = 'Yes'
+		vd=frappe.db.get_value("Verification Details",{"email":self.user},["mflag","name","verification_for"],as_dict=1)
 
 		if info.user_type == "Website User":
+			# check for valid user login details, provider can not login from patient login form and vice-versa
+			self.is_valid_user(info)
+
+			# anand
+			frappe.local.response["mob_v_req"] = 'No'
+			if vd and vd.mflag == 0 and info.access_type == "Patient":
+				frappe.local.response["mob_v_req"] = 'Yes'
+
 			frappe.local.cookie_manager.set_cookie("system_user", "no")
 			frappe.local.response["message"] = "No App"
 			if info.access_type == 'Patient':
@@ -113,6 +122,11 @@ class LoginManager:
 			elif info.access_type == 'Provider':
 				frappe.local.response["access_link"] = "/provider"
 				frappe.local.cookie_manager.set_cookie("user_type","provider")
+				# # check if provider is verified or not
+				# is_verified = "No"
+				# if vd.verification_for == "Provider":
+				# 	is_verified = "Yes" if frappe.db.get_value("Provider",{"provider_id":vd.name}, "is_verified") else "No"
+				# frappe.local.response["is_provider_verified"] = is_verified
 			elif info.access_type == 'Admin':
 				frappe.local.response["access_link"] = "/products"
 		else:
@@ -123,7 +137,7 @@ class LoginManager:
 		frappe.response["full_name"] = full_name
 		frappe.local.cookie_manager.set_cookie("full_name", full_name)
 		frappe.local.cookie_manager.set_cookie("user_id", self.user)
-		
+
 		if vd:
 			frappe.response["profile_id"] = vd.get('name')
 			frappe.local.cookie_manager.set_cookie("profile_id", vd.name)
@@ -131,7 +145,7 @@ class LoginManager:
 		elif info.profile_id:
 			frappe.response["profile_id"] = info.profile_id
 			frappe.local.cookie_manager.set_cookie("profile_id", info.profile_id)
-		
+
 		frappe.local.cookie_manager.set_cookie("user_image", info.user_image or "")
 
 	def make_session(self, resume=False):
