@@ -538,6 +538,7 @@ $(document).ready(function() {
 		$("#website-post-login .dropdown-menu").append('<li class="divider"></li>\
 			<li><a href="/desk" no-pjax><i class="icon-fixed-width icon-th-large"></i> Switch To Desk</a></li>');
 	}
+	
 
 	frappe.render_user();
 	frappe.setup_push_state()

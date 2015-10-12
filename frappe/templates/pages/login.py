@@ -165,7 +165,9 @@ def login_oauth_user(data, provider=None):
 
 	if data.has_key("email"):
 		user = data["email"]
-
+		user_type = frappe.db.get_value("User",{"email":user},"access_type")
+		if user_type == 'Provider':
+			return _("Provider Cant Use this Functionality")	
 		try:
 			update_oauth_user(user, data, provider)
 		except SignupDisabledError:
