@@ -167,7 +167,7 @@ def login_oauth_user(data, provider=None):
 		user = data["email"]
 		user_type = frappe.db.get_value("User",{"email":user},"access_type")
 		if user_type == 'Provider':
-			return frappe.respond_as_web_page("Not Allowed", "Sorry. Provider Cant Use this Functionality.",
+			return frappe.respond_as_web_page("Not Allowed", """<p style="margin-top:10%;text-align: center;"">Sorry. Provider Cant Use this Functionality.</p><p style="text-align: center;">""",
 				success=False, http_status_code=403)
 
 		try:
