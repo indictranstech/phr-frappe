@@ -107,7 +107,7 @@ class LoginManager:
 
 		if info.user_type == "Website User":
 			# check for valid user login details, provider can not login from patient login form and vice-versa
-			self.is_valid_user(info)
+			# self.is_valid_user(info)
 
 			# anand
 			frappe.local.response["mob_v_req"] = 'No'
