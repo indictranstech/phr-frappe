@@ -380,7 +380,7 @@
    "fieldname": "access_type", 
    "fieldtype": "Select", 
    "label": "Access Type", 
-   "options": "\nWebsite User\nPatient\nProvider\nAdmin", 
+   "options": "\nPatient\nProvider\nChemist\nStockist\nLab\nHospital\nDelivery Boy", 
    "permlevel": 0, 
    "precision": ""
   }, 
@@ -530,7 +530,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 5, 
- "modified": "2015-03-23 17:56:14.561057", 
+ "modified": "2016-01-09 14:35:55.579723", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 

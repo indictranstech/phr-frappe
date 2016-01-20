@@ -111,6 +111,24 @@ class LoginManager:
 
 			# anand
 			frappe.local.response["mob_v_req"] = 'No'
+			# if vd and vd.mflag == 0 and info.access_type == "Patient":
+			# 	frappe.local.response["mob_v_req"] = 'Yes'
+
+			# frappe.local.cookie_manager.set_cookie("system_user", "no")
+			# frappe.local.response["message"] = "No App"
+			# if info.access_type == 'Patient':
+			# 	frappe.local.response["access_link"] = "/patient"
+			# 	frappe.local.cookie_manager.set_cookie("user_type","patient")
+			# elif info.access_type == 'Provider':
+			# 	frappe.local.response["access_link"] = "/provider"
+			# 	frappe.local.cookie_manager.set_cookie("user_type","provider")
+			# 	# # check if provider is verified or not
+			# 	# is_verified = "No"
+			# 	# if vd.verification_for == "Provider":
+			# 	# 	is_verified = "Yes" if frappe.db.get_value("Provider",{"provider_id":vd.name}, "is_verified") else "No"
+			# 	# frappe.local.response["is_provider_verified"] = is_verified
+
+			frappe.local.response["mob_v_req"] = 'No'
 			if vd and vd.mflag == 0 and info.access_type == "Patient":
 				frappe.local.response["mob_v_req"] = 'Yes'
 
@@ -118,15 +136,26 @@ class LoginManager:
 			frappe.local.response["message"] = "No App"
 			if info.access_type == 'Patient':
 				frappe.local.response["access_link"] = "/patient"
+				frappe.local.response["access_role"] = "Patient"
 				frappe.local.cookie_manager.set_cookie("user_type","patient")
 			elif info.access_type == 'Provider':
 				frappe.local.response["access_link"] = "/provider"
+				frappe.local.response["access_role"] = "Provider"
 				frappe.local.cookie_manager.set_cookie("user_type","provider")
-				# # check if provider is verified or not
-				# is_verified = "No"
-				# if vd.verification_for == "Provider":
-				# 	is_verified = "Yes" if frappe.db.get_value("Provider",{"provider_id":vd.name}, "is_verified") else "No"
-				# frappe.local.response["is_provider_verified"] = is_verified
+			elif info.access_type == 'Lab':
+				frappe.local.response["access_link"] = "/lab"
+				frappe.local.response["access_role"] = "Lab"
+				frappe.local.cookie_manager.set_cookie("user_type","lab")
+			elif info.access_type == 'Delivery Boy':
+				frappe.local.response["access_link"] = "/delivery_boy"
+				frappe.local.response["access_role"] = "Delivery Boy"
+				frappe.local.cookie_manager.set_cookie("user_type","delivery_boy")
+			elif info.access_type == 'Chemist':
+				frappe.local.response["access_role"] = "Chemist"
+				frappe.response["name"] = frappe.db.get_value("Medical Store", {"store_id": info.profile_id}, "name")
+			elif info.access_type == 'Stockist':
+				frappe.local.response["access_role"] = "Stockist"
+				frappe.local.response["name"] = frappe.db.get_value("Stockist", {"stockist_id": info.profile_id}, "name")
 			elif info.access_type == 'Admin':
 				frappe.local.response["access_link"] = "/products"
 		else:
@@ -154,9 +183,11 @@ class LoginManager:
 
 		# reset user if changed to Guest
 		self.user = frappe.local.session_obj.user
+		print ["data", self.user]
 		frappe.local.session = frappe.local.session_obj.data
 
 	def authenticate(self, user=None, pwd=None):
+		print ["data",user, pwd]
 		if not (user and pwd):
 			user, pwd = frappe.form_dict.get('usr'), frappe.form_dict.get('pwd')
 		if not (user and pwd):
