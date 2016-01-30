@@ -150,6 +150,12 @@ class LoginManager:
 				frappe.local.response["access_link"] = "/delivery_boy"
 				frappe.local.response["access_role"] = "Delivery Boy"
 				frappe.local.cookie_manager.set_cookie("user_type","delivery_boy")
+				db_parent = self.get_db_parent(info.profile_id)
+				
+				if db_parent == "Medical Store":
+					frappe.local.response["check_for_status"] = "Waiting For Patients Confirmation"
+				if db_parent == "Stockist":
+					frappe.local.response["access_link"] = "Waiting For Chemist Confirmation"
 			elif info.access_type == 'Chemist':
 				frappe.local.response["access_role"] = "Chemist"
 				frappe.response["name"] = frappe.db.get_value("Medical Store", {"store_id": info.profile_id}, "name")
@@ -177,6 +183,9 @@ class LoginManager:
 
 		frappe.local.cookie_manager.set_cookie("user_image", info.user_image or "")
 
+	def get_db_parent(Self, profile_id):
+		return frappe.get_doc("Chemist Delivery Team", {"provider_id": profile_id}).parenttype
+		
 	def make_session(self, resume=False):
 		# start session
 		frappe.local.session_obj = Session(user=self.user, resume=resume)
