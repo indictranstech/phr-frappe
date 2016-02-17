@@ -380,7 +380,15 @@
    "fieldname": "access_type", 
    "fieldtype": "Select", 
    "label": "Access Type", 
-   "options": "\nWebsite User\nPatient\nProvider\nAdmin", 
+   "options": "\nWebsite User\nPatient\nProvider\nAdmin\nHospital\nChemist\nStockist", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "sub_access_type", 
+   "fieldtype": "Select", 
+   "label": "Sub Access Type", 
+   "options": "\nMF\nF\nMH\nMHU", 
    "permlevel": 0, 
    "precision": ""
   }, 
@@ -530,7 +538,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 5, 
- "modified": "2015-03-23 17:56:14.561057", 
+ "modified": "2016-01-23 15:00:29.206895", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 
