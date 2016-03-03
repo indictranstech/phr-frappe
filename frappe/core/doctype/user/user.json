@@ -211,6 +211,13 @@
    "search_index": 0
   }, 
   {
+   "fieldname": "age", 
+   "fieldtype": "Int", 
+   "label": "Age", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "fieldname": "birth_date", 
    "fieldtype": "Date", 
    "label": "Birth Date", 
@@ -380,7 +387,7 @@
    "fieldname": "access_type", 
    "fieldtype": "Select", 
    "label": "Access Type", 
-   "options": "\nWebsite User\nPatient\nProvider\nAdmin\nHospital\nChemist\nStockist", 
+   "options": "\nPatient\nProvider\nChemist\nStockist\nLab\nHospital\nDelivery Boy", 
    "permlevel": 0, 
    "precision": ""
   }, 
@@ -538,7 +545,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 5, 
- "modified": "2016-01-23 15:00:29.206895", 
+ "modified": "2016-03-02 18:18:53.766758", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 
