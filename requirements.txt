@@ -17,7 +17,7 @@ termcolor
 werkzeug
 semantic_version
 rauth>=0.6.2
-requests==2.5.1
+requests>=2.20.0
 celery
 redis
 selenium
